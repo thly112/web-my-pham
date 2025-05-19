@@ -88,7 +88,11 @@ public class ProductDAOImp implements IProductDAO {
 
 		try {
 
-			String query = "select * from PRODUCT where ProductName like N'%" + productName + "%'";
+//			String query = "select * from PRODUCT where ProductName like N'%" + productName + "%'";
+			String query = "SELECT * FROM PRODUCT WHERE ProductName LIKE ?";
+			ps = conn.prepareStatement(query);
+			ps.setString(1, "%" + productName + "%");
+
 			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -181,7 +185,7 @@ public class ProductDAOImp implements IProductDAO {
 
 		try {
 
-			String query = "select top " + amount +  " * from PRODUCT order by productId desc";
+			String query = "SELECT * FROM PRODUCT ORDER BY productId DESC LIMIT " + amount;
 			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -212,8 +216,7 @@ public class ProductDAOImp implements IProductDAO {
 
 		try {
 
-			String query = "select top " + amount + " * from PRODUCT order by price";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			String query = "SELECT * FROM PRODUCT ORDER BY price LIMIT " + amount;			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
