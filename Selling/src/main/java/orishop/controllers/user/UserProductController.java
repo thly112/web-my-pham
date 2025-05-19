@@ -32,12 +32,12 @@ import orishop.services.RatingServiceImpl;
 		"/user/product/topProduct", "/user/product/searchProduct", "/user/product/review",
 		"/user/product/deleterating"})
 public class UserProductController extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
 
 	IProductService productService = new ProductServiceImp();
 	ICategoryService categoryService = new CategoryServiceImp();
 	IRatingService ratingService = new RatingServiceImpl();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String url = req.getRequestURI().toString();
@@ -94,6 +94,42 @@ public class UserProductController extends HttpServlet {
 		}
 	}
 
+	// Hàm phụ để kiểm tra và chuyển đổi ID thành số nguyên (dành cho bảo mật)
+	private int validateAndParseId(String idParam, String paramName, HttpServletResponse resp) throws IOException {
+	    if (idParam == null || !idParam.matches("\\d+")) {
+	        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid " + paramName + " format");
+	        return -1;
+	    }
+	    try {
+	        int id = Integer.parseInt(idParam);
+	        if (id <= 0) {
+	            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, paramName + " must be a positive number");
+	            return -1;
+	        }
+	        return id;
+	    } catch (NumberFormatException e) {
+	        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid " + paramName + " format");
+	        return -1;
+	    }
+	}
+	// Hàm phụ để kiểm tra và chuyển đổi số trang
+	private int validateAndParsePage(String pageParam, int maxPage, HttpServletResponse resp) throws IOException {
+	    if (pageParam == null) {
+	        return 1;
+	    }
+	    try {
+	        int page = Integer.parseInt(pageParam);
+	        if (page <= 0 || page > maxPage) {
+	            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Page number must be between 1 and " + maxPage);
+	            return -1;
+	        }
+	        return page;
+	    } catch (NumberFormatException e) {
+	        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number format");
+	        return -1;
+	    }
+	}
+	
 	private void postSearchProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String proName = req.getParameter("searchProduct");
 		List<ProductModels> listProduct = productService.findProduct(proName);
@@ -101,17 +137,13 @@ public class UserProductController extends HttpServlet {
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		if (page == -1) return;
+
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -132,17 +164,13 @@ public class UserProductController extends HttpServlet {
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+		
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		if (page == -1) return;
+
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -164,17 +192,13 @@ public class UserProductController extends HttpServlet {
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+		
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		if (page == -1) return;
+
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -192,8 +216,11 @@ public class UserProductController extends HttpServlet {
 	}
 	
 	private void getDetailProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int pid = Integer.parseInt(req.getParameter("pid"));
-		ProductModels pro = productService.findOne(pid);
+		String pidParam = req.getParameter("pid");
+	    int id = validateAndParseId(pidParam, "Product ID", resp);
+	    if (id == -1) return;
+
+		ProductModels pro = productService.findOne(id);
 		req.setAttribute("p", pro);
 		
 		HttpSession session = req.getSession();
@@ -201,10 +228,11 @@ public class UserProductController extends HttpServlet {
 		session.setAttribute("productID", pro.getProductId());
 		req.getRequestDispatcher("/views/user/product/detailproduct.jsp").forward(req, resp);
 	}
-	
 
 	private void getProductByCategory(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int id = Integer.parseInt(req.getParameter("cid"));
+		String cidParam = req.getParameter("cid");
+	    int id = validateAndParseId(cidParam, "Category ID", resp);
+	    if (id == -1) return;
 		
 		List<ProductModels> listProduct = productService.findByCategory(id);
 		
@@ -212,17 +240,13 @@ public class UserProductController extends HttpServlet {
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+		
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+	    if (page == -1) return;
+	    
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -243,17 +267,13 @@ public class UserProductController extends HttpServlet {
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+		
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		if (page == -1) return;
+
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -278,7 +298,10 @@ public class UserProductController extends HttpServlet {
 //	}
 
 	private void getDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		int id = Integer.parseInt(req.getParameter("pid"));
+		String pidParam = req.getParameter("pid");
+	    int id = validateAndParseId(pidParam, "Product ID", resp);
+	    if (id == -1) return;
+	    
 		ProductModels product = productService.findOne(id);
 		productService.deleteProduct(product);
 		resp.sendRedirect(req.getContextPath() + "/product/listproduct");
@@ -324,7 +347,10 @@ public class UserProductController extends HttpServlet {
 
 	// Chưa check
 	private void getUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int id = Integer.parseInt(req.getParameter("pid"));
+		String pidParam = req.getParameter("pid");
+	    int id = validateAndParseId(pidParam, "Product ID", resp);
+	    if (id == -1) return;
+
 		ProductModels product = productService.findOne(id);
 
 		List<CategoryModels> listcate = categoryService.findAllCategory();
@@ -334,23 +360,18 @@ public class UserProductController extends HttpServlet {
 		req.getRequestDispatcher("/views/Product/updateproduct.jsp").forward(req, resp);
 	}
 
-	private void getListProduct(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	private void getListProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		List<ProductModels> listProduct = productService.findAllProduct();
 		int pagesize = 10;
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
-		int page, numberpage = pagesize;
-		String xpage = req.getParameter("page");
-		if (xpage == null) {
-			page = 1;
-		}
-		else {
-			page = Integer.parseInt(xpage);
-		}
+
+		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+	    if (page == -1) return;
+		
 		int start,end;
-		start = (page - 1) * numberpage;
-		end = Math.min(page*numberpage, size);
+		start = (page - 1) * pagesize;
+		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
@@ -406,12 +427,15 @@ public class UserProductController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		int pid = Integer.parseInt(req.getParameter("pid"));
-		ProductModels product = productService.findOne(pid);
+		String pidParam = req.getParameter("pid");
+	    int id = validateAndParseId(pidParam, "Product ID", resp);
+	    if (id == -1) return;
+	    
+		ProductModels product = productService.findOne(id);
 		HttpSession session = req.getSession();
 		CustomerModels customer = (CustomerModels) session.getAttribute("customer");
 		
-		RatingModels rating = ratingService.findOne(customer.getCustomerId(), pid);
+		RatingModels rating = ratingService.findOne(customer.getCustomerId(), id);
 		List<CategoryModels> listcate = categoryService.findAllCategory();
 		
 		ratingService.delete(rating.getRatingId());

@@ -181,7 +181,7 @@ public class ProductDAOImp implements IProductDAO {
 
 		try {
 
-			String query = "select top " + amount +  " * from PRODUCT order by productId desc";
+			String query = "SELECT * FROM PRODUCT ORDER BY productId DESC LIMIT " + amount;
 			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -212,7 +212,7 @@ public class ProductDAOImp implements IProductDAO {
 
 		try {
 
-			String query = "select top " + amount + " * from PRODUCT order by price";
+			String query = "SELECT * FROM PRODUCT ORDER BY price LIMIT " + amount;
 			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
