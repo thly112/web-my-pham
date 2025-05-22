@@ -18,6 +18,16 @@
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+        <filter-name>securityHeaderFilter</filter-name>
+        <filter-class>orishop.util.SecurityHeaderFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>securityHeaderFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 	<session-config>
 		<tracking-mode>COOKIE</tracking-mode>
