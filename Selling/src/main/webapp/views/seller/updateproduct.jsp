@@ -16,10 +16,10 @@
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css" />
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link
-	href="/static/css/all.min.css"
+	href="${pageContext.request.contextPath}/static/css/all.min.css"
 	rel="stylesheet">
 <!-- Core theme CSS (includes Bootstrap)-->
 		
@@ -32,7 +32,7 @@
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css" />
 	
-<link href="/static/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <link rel="stylesheet"
 	href="fonts/material-icon/css/material-design-iconic-font.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">

@@ -6,7 +6,10 @@
     <meta charset="UTF-8" />
     <title>Thông tin người dùng</title>
 
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -186,8 +189,8 @@
 
     <!-- end content -->
 
-    <script src="/static/js/popper.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
   </body>
 </html>

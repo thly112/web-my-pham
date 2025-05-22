@@ -16,8 +16,14 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
       rel="stylesheet"
       type="text/css"
     />
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/static/css/all.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="${pageContext.request.contextPath}/static/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- Core theme CSS (includes Bootstrap)-->
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -34,7 +40,7 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
     />
 
     <link
-      href="/static/css/bootstrap.min.css"
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
@@ -806,8 +812,8 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
         </div>
       </div>
     </main>
-    <script src="/static/js/popper.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
     <script>
       // JavaScript để tăng cường màu sắc
       document.addEventListener("DOMContentLoaded", function () {

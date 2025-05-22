@@ -9,10 +9,10 @@
 <head>
 <title>Trang chủ</title>
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
-	href="/static/css/all.min.css">
+	href="${pageContext.request.contextPath}/static/css/all.min.css">
 <%-- <link
 	href="${pageContext.request.contextPath}/templates/user/css/product/style.css"
 	rel="stylesheet" type="text/css"> --%>

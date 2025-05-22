@@ -4,7 +4,10 @@ pageEncoding="UTF-8"%> <%@ include file="/common/taglist.jsp"%>
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"

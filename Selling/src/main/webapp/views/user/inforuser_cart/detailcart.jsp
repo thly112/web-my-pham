@@ -9,7 +9,7 @@
 <title>Giỏ hàng</title>
 
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -187,9 +187,9 @@
 	</div>
 
 	<script
-		src="/static/js/popper.min.js"></script>
+		src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
 	<script
-		src="/static/js/bootstrap.min.js"></script>
+		src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
 	<script>
 	    function updateOrder() {
 	        // Use AJAX to send a request to your server-side code

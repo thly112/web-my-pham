@@ -23,7 +23,10 @@ pageEncoding="UTF-8"%> <%@ include file="/common/taglist.jsp"%>
     />
 
     <!--MAIN CSS-->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"

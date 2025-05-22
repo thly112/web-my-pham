@@ -20,7 +20,7 @@
 
 <!--MAIN CSS-->
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
@@ -151,9 +151,9 @@
 			</div>
 			<%@ include file="/common/manager/footer.jsp"%>
 			<script
-				src="/static/js/popper.min.js"></script>
+				src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
 			<script
-				src="/static/js/bootstrap.min.js"></script>
+				src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
 			<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 			<script
 				src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

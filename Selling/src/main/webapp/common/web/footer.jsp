@@ -18,10 +18,10 @@
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css" />
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link
-	href="/static/css/all.min.css"
+	href="${pageContext.request.contextPath}/static/css/all.min.css"
 	rel="stylesheet">
 
 <!-- Favicon-->
@@ -34,7 +34,7 @@
 	rel="stylesheet" type="text/css" />
 
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="fonts/material-icon/css/material-design-iconic-font.min.css">

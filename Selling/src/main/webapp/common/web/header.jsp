@@ -19,7 +19,7 @@
 	rel="stylesheet" type="text/css" />
 
 <link
-	href="/static/css/bootstrap.min.css"
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="fonts/material-icon/css/material-design-iconic-font.min.css">

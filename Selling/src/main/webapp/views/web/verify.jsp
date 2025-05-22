@@ -6,8 +6,14 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Google fonts-->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/static/css/all.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="${pageContext.request.contextPath}/static/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link
       href='<c:url value="/stylecss/base/basecss.css" />'
@@ -23,7 +29,10 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="fonts/material-icon/css/material-design-iconic-font.min.css"

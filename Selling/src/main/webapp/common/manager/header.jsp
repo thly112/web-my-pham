@@ -171,8 +171,8 @@ pageEncoding="UTF-8"%> <%@ include file="/common/taglist.jsp"%>
     </ul>
   </div>
 </nav>
-<script src="/static/js/popper.min.js"></script>
-<script src="/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
