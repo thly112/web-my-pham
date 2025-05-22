@@ -30,31 +30,46 @@ public class UserCartController extends HttpServlet {
 	ICategoryService categoryService = new CategoryServiceImp();
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		String url = req.getRequestURI().toString();
-		int flag = 1;
-		HttpSession session = req.getSession();
-		session.setAttribute("flag", flag);
-		if (url.contains("user/findCartByCartID")) {
-			listCartItemByPage(req, resp);
-		} else if (url.contains("user/deleteCartItem")) {
-			deleteCartItemByPage(req, resp);
-		} else if (url.contains("user/updateCartItem")) {
-			updateCartItem(req, resp);
-		} else if (url.contains("user/mypurchase")) {
-			getMyPurchase(req, resp);
+		try {
+			String url = req.getRequestURI().toString();
+			int flag = 1;
+			HttpSession session = req.getSession();
+			session.setAttribute("flag", flag);
+			if (url.contains("user/findCartByCartID")) {
+				listCartItemByPage(req, resp);
+			} else if (url.contains("user/deleteCartItem")) {
+				deleteCartItemByPage(req, resp);
+			} else if (url.contains("user/updateCartItem")) {
+				updateCartItem(req, resp);
+			} else if (url.contains("user/mypurchase")) {
+				getMyPurchase(req, resp);
+			}
 		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
+		}
+		
 
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String url = req.getRequestURI().toString();
-		if (url.contains("insertCartItem")) {
-			insertCartItem(req, resp);
-		} else if (url.contains("/user/insertorder")) {
-			insertOrder(req, resp);
-			deleteAllCartItem(req, resp);
+		try {
+			String url = req.getRequestURI().toString();
+			if (url.contains("insertCartItem")) {
+				insertCartItem(req, resp);
+			} else if (url.contains("/user/insertorder")) {
+				insertOrder(req, resp);
+				deleteAllCartItem(req, resp);
+			}
 		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
+		}
+		
 	}
 
 	private void updateCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
