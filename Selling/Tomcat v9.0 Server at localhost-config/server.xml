@@ -164,8 +164,5 @@
 
       <Context docBase="Selling" path="/Selling" reloadable="true" source="org.eclipse.jst.jee.server:Selling"/></Host>
     </Engine>
-    
-     <Connector SSLEnabled="true" clientAuth="false" keystoreFile="/Users/nguyenvuongviet/Downloads/eclipse/keystore.jks" keystorePass="123456" maxThreads="150" port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" scheme="https" secure="true" sslProtocol="TLS"/>
-    
   </Service>
 </Server>

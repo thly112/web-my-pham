@@ -96,21 +96,26 @@ public class UserProductController extends HttpServlet {
 
 	// Hàm phụ để kiểm tra và chuyển đổi ID thành số nguyên (dành cho bảo mật)
 	private int validateAndParseId(String idParam, String paramName, HttpServletResponse resp) throws IOException {
-	    if (idParam == null || !idParam.matches("\\d+")) {
-	        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid " + paramName + " format");
-	        return -1;
-	    }
-	    try {
-	        int id = Integer.parseInt(idParam);
-	        if (id <= 0) {
-	            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, paramName + " must be a positive number");
-	            return -1;
-	        }
-	        return id;
-	    } catch (NumberFormatException e) {
-	        resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid " + paramName + " format");
-	        return -1;
-	    }
+		if (idParam == null || !idParam.matches("\\d+") || idParam.length() > 10) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid " + paramName + " format");
+			return -1;
+		}
+		int id = Integer.parseInt(idParam);
+		if (id <= 0) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, paramName + " must be a positive number");
+			return -1;
+		}
+		return id;
+	}
+	private String sanitizeInput(String input) {
+		if (input == null) {
+			return null;
+		}
+		String sanitized = input.replaceAll("[<>&'\"]", "");
+		if (sanitized.length() > 10 || !sanitized.matches("\\d+")) {
+			return null; // Loại bỏ nếu không hợp lệ
+		}
+		return sanitized;
 	}
 	// Hàm phụ để kiểm tra và chuyển đổi số trang
 	private int validateAndParsePage(String pageParam, int maxPage, HttpServletResponse resp) throws IOException {
@@ -138,7 +143,9 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		int page = validateAndParsePage(pageParam, num, resp);
 		if (page == -1) return;
 
 		int start,end;
@@ -165,7 +172,8 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 		
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		int page = validateAndParsePage(pageParam, num, resp);
 		if (page == -1) return;
 
 		int start,end;
@@ -193,7 +201,8 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 		
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		int page = validateAndParsePage(pageParam, num, resp);
 		if (page == -1) return;
 
 		int start,end;
@@ -216,21 +225,33 @@ public class UserProductController extends HttpServlet {
 	}
 	
 	private void getDetailProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String pidParam = req.getParameter("pid");
-	    int id = validateAndParseId(pidParam, "Product ID", resp);
-	    if (id == -1) return;
+		try {
+			String pidParam = sanitizeInput(req.getParameter("pid"));
+			if (pidParam == null) {
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Product ID format");
+				return;
+			}
+			int id = validateAndParseId(pidParam, "Product ID", resp);
+			if (id == -1) return;
 
-		ProductModels pro = productService.findOne(id);
-		req.setAttribute("p", pro);
-		
-		HttpSession session = req.getSession();
-		session = req.getSession(true);
-		session.setAttribute("productID", pro.getProductId());
-		req.getRequestDispatcher("/views/user/product/detailproduct.jsp").forward(req, resp);
+			ProductModels pro = productService.findOne(id);
+			if (pro == null) {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+				return;
+			}
+
+			HttpSession session = req.getSession();
+			session.setAttribute("productID", pro.getProductId());
+			req.setAttribute("p", pro);
+			req.getRequestDispatcher("/views/user/product/detailproduct.jsp").forward(req, resp);
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+			e.printStackTrace(); // Ghi log thay vì in ra console
+		}
 	}
 
 	private void getProductByCategory(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String cidParam = req.getParameter("cid");
+		String cidParam = sanitizeInput(req.getParameter("cid"));
 	    int id = validateAndParseId(cidParam, "Category ID", resp);
 	    if (id == -1) return;
 		
@@ -241,7 +262,8 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 		
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		int page = validateAndParsePage(pageParam, num, resp);
 	    if (page == -1) return;
 	    
 		int start,end;
@@ -268,7 +290,8 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 		
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		int page = validateAndParsePage(pageParam, num, resp);
 		if (page == -1) return;
 
 		int start,end;
@@ -298,7 +321,7 @@ public class UserProductController extends HttpServlet {
 //	}
 
 	private void getDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String pidParam = req.getParameter("pid");
+		String pidParam = sanitizeInput(req.getParameter("pid"));
 	    int id = validateAndParseId(pidParam, "Product ID", resp);
 	    if (id == -1) return;
 	    
@@ -347,7 +370,7 @@ public class UserProductController extends HttpServlet {
 
 	// Chưa check
 	private void getUpdate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String pidParam = req.getParameter("pid");
+		String pidParam = sanitizeInput(req.getParameter("pid"));
 	    int id = validateAndParseId(pidParam, "Product ID", resp);
 	    if (id == -1) return;
 
@@ -366,7 +389,12 @@ public class UserProductController extends HttpServlet {
 		int size = listProduct.size();
 		int num = (size%pagesize==0 ? (size/pagesize) : (size/pagesize + 1));
 
-		int page = validateAndParsePage(req.getParameter("page"), num, resp);
+		String pageParam = sanitizeInput(req.getParameter("page"));
+		if (pageParam == null) {
+		resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page format");
+		return;
+		}
+		int page = validateAndParsePage(pageParam, num, resp);
 	    if (page == -1) return;
 		
 		int start,end;
@@ -427,7 +455,7 @@ public class UserProductController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		
-		String pidParam = req.getParameter("pid");
+		String pidParam = sanitizeInput(req.getParameter("pid"));
 	    int id = validateAndParseId(pidParam, "Product ID", resp);
 	    if (id == -1) return;
 	    

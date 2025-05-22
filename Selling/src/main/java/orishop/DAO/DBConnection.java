@@ -8,7 +8,7 @@ import orishop.DAO.DBConnection;
 public class DBConnection {
 	 private final static String serverName = "localhost"; // Thay đổi nếu dùng server khác
 	    private final static String portNumber = "3306"; // Port mặc định của MySQL
-	    private final static String dbName = "db_my_pham"; // Đổi tên DB nếu cần
+	    private final static String dbName = "CosmeticStore"; // Đổi tên DB nếu cần
 	    private final static String userID = "root"; // Tài khoản MySQL (thay nếu khác)
 	    private final static String password = "12345678"; // Mật khẩu MySQL
 	    
