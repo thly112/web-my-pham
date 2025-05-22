@@ -110,37 +110,51 @@ public class WebHomeControllers extends HttpServlet {
 	}
 
 	private void postForgotPassword(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		resp.setContentType("text/html");
-		resp.setCharacterEncoding("UTF-8");
-		req.setCharacterEncoding("UTF-8");
+	        throws ServletException, IOException {
+	    resp.setContentType("text/html; charset=UTF-8");
+	    req.setCharacterEncoding("UTF-8");
 
-		String username = req.getParameter("username");
-		String email = req.getParameter("email");
-		AccountModels user = accountService.findOne(username);
-		if (user.getUsername() != null && user.getMail() != null) {
-			if (user.getMail().equals(email) && user.getUsername().equals(username)) {
-				Email sm = new Email();
+	    try {
+	        String username = req.getParameter("username");
+	        String email = req.getParameter("email");
 
-				boolean test = sm.EmailSend(user);
+	        AccountModels user = accountService.findOne(username);
 
-				if (test) {
-					req.setAttribute("message", "Vui lòng kiểm tra Email để nhận mật khẩu");
-					req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
-				} else {
-					req.setAttribute("error", "Lỗi gửi mail");
-					req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
-				}
-			} else {
-				req.setAttribute("error", "username hoặc email không tồn tại trong hệ thống!");
-				req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
-				return;
-			}
-		} else {
-			req.setAttribute("error", "username hoặc email không tồn tại trong hệ thống!");
-			req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
-		}
+	        // Kiểm tra null trước khi truy cập thuộc tính
+	        if (user == null || user.getMail() == null || user.getUsername() == null) {
+	            req.setAttribute("error", "Tên đăng nhập hoặc email không đúng");
+	            req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+	            return;
+	        }
+
+	        // So sánh thông tin người dùng
+	        if (!user.getUsername().equals(username) || !user.getMail().equals(email)) {
+	            req.setAttribute("error", "Tên đăng nhập hoặc email không đúng");
+	            req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+	            return;
+	        }
+
+	        // Gửi email
+	        Email sm = new Email();
+	        boolean sent = sm.EmailSend(user);
+
+	        if (sent) {
+	            req.setAttribute("message", "Vui lòng kiểm tra email để nhận mật khẩu");
+	            req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	        } else {
+	            req.setAttribute("error", "Không thể gửi email lúc này. Vui lòng thử lại sau.");
+	            req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	        }
+
+	    } catch (Exception e) {
+	        // Ghi log nội bộ, tránh hiển thị chi tiết lỗi cho người dùng
+	        e.printStackTrace(); // Có thể thay bằng logger.error("Lỗi gửi email khôi phục mật khẩu", e);
+
+	        req.setAttribute("error", "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+	        req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+	    }
 	}
+
 
 	private void getLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// check session
@@ -166,52 +180,51 @@ public class WebHomeControllers extends HttpServlet {
 	}
 
 	private void postLogin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html");
-		resp.setCharacterEncoding("UTF-8");
-		req.setCharacterEncoding("UTF-8");
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		boolean isRememberMe = false;
-		String remember = req.getParameter("remember");
+	    resp.setContentType("text/html; charset=UTF-8");
+	    req.setCharacterEncoding("UTF-8");
 
-		if ("on".equals(remember)) {
-			isRememberMe = true;
-		}
-		String alertMsg = "";
-		if (username.isEmpty() || password.isEmpty()) {
-			alertMsg = "Tài khoản hoặc mật khẩu không đúng";
-			req.setAttribute("error", alertMsg);
-			req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
-			return;
-		}
+	    try {
+	        String username = req.getParameter("username");
+	        String password = req.getParameter("password");
+	        String remember = req.getParameter("remember");
 
-		AccountModels user = accountService.login(username, password);
-		if (user != null) {
-			if (user.getStatus() == 1) {
+	        boolean isRememberMe = "on".equals(remember);
 
-				// tạo session
-				HttpSession session = req.getSession(true);
-				session.setAttribute("account", user);
+	        // Kiểm tra đầu vào rỗng/null
+	        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+	            req.setAttribute("error", "Tài khoản hoặc mật khẩu không đúng");
+	            req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	            return;
+	        }
 
-				if (isRememberMe) {
-					saveRememberMe(resp, username);
-				}
+	        AccountModels user = accountService.login(username, password);
 
-				resp.sendRedirect(req.getContextPath() + "/web/waiting");
+	        // Kiểm tra thông tin đăng nhập
+	        if (user == null || user.getStatus() != 1) {
+	            req.setAttribute("error", "Tài khoản hoặc mật khẩu không đúng");
+	            req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	            return;
+	        }
 
-			} else {
-				alertMsg = "Tài khoản đã bị khóa, liên hệ  Admin nhé";
-				req.setAttribute("error", alertMsg);
-				req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
-			}
+	        // Đăng nhập thành công
+	        HttpSession session = req.getSession(true);
+	        session.setAttribute("account", user);
 
-		} else {
-			alertMsg = "Tài khoản hoặc mật khẩu không đúng";
-			req.setAttribute("error", alertMsg);
-			req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	        if (isRememberMe) {
+	            saveRememberMe(resp, username);
+	        }
 
-		}
+	        resp.sendRedirect(req.getContextPath() + "/web/waiting");
+
+	    } catch (Exception e) {
+	        // Ghi log nội bộ nếu cần
+	        e.printStackTrace(); // Có thể dùng logger.error("Lỗi đăng nhập", e);
+
+	        req.setAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
+	        req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+	    }
 	}
+
 
 	private void getWaiting(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
