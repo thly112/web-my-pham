@@ -50,12 +50,10 @@ public class UserCartController extends HttpServlet {
 			req.setAttribute("error", "Không tìm thấy sản phẩm.");
 			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
-		
 
 	}
 
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		try {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {try {
 			String url = req.getRequestURI().toString();
 			if (url.contains("insertCartItem")) {
 				insertCartItem(req, resp);
@@ -63,13 +61,11 @@ public class UserCartController extends HttpServlet {
 				insertOrder(req, resp);
 				deleteAllCartItem(req, resp);
 			}
-		}
-		catch (Exception ex) {
+		}catch (Exception ex) {
 			ex.printStackTrace();
 			req.setAttribute("error", "Không tìm thấy sản phẩm.");
 			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
-		
 	}
 
 	private void updateCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

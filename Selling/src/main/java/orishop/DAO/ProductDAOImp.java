@@ -22,7 +22,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select * from PRODUCT";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -55,7 +55,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select * from PRODUCT where categoryID = ?";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, cid);
 			rs = ps.executeQuery();
@@ -87,14 +87,11 @@ public class ProductDAOImp implements IProductDAO {
 		List<ProductModels> listProduct = new ArrayList<ProductModels>();
 
 		try {
-
-//			String query = "select * from PRODUCT where ProductName like N'%" + productName + "%'";
-			String query = "SELECT * FROM PRODUCT WHERE ProductName LIKE ?";
-			ps = conn.prepareStatement(query);
-			ps.setString(1, "%" + productName + "%");
-
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
-			ps = conn.prepareStatement(query);
+			String query = "SELECT * FROM PRODUCT WHERE ProductName LIKE N?";
+	        conn = DBConnection.getConnection();
+	        ps = conn.prepareStatement(query);
+	        ps.setString(1, "%" + productName + "%"); 
+			
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -124,7 +121,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select * from PRODUCT order by Price desc";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -155,7 +152,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select * from PRODUCT order by Price asc";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -184,9 +181,8 @@ public class ProductDAOImp implements IProductDAO {
 		List<ProductModels> listProduct = new ArrayList<ProductModels>();
 
 		try {
-
 			String query = "SELECT * FROM PRODUCT ORDER BY productId DESC LIMIT " + amount;
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -215,8 +211,8 @@ public class ProductDAOImp implements IProductDAO {
 		List<ProductModels> listProduct = new ArrayList<ProductModels>();
 
 		try {
-
-			String query = "SELECT * FROM PRODUCT ORDER BY price LIMIT " + amount;			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			String query = "SELECT * FROM PRODUCT ORDER BY price LIMIT " + amount;
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -247,7 +243,7 @@ public class ProductDAOImp implements IProductDAO {
 		
 		try {
 			
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, product.getProductName());
 			ps.setString(2, product.getDescription());
@@ -271,7 +267,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select * from PRODUCT where productId = ?";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, productId);
 			rs = ps.executeQuery();
@@ -302,7 +298,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "select top 1 * from PRODUCT order by productId desc";
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
@@ -332,7 +328,7 @@ public class ProductDAOImp implements IProductDAO {
 				+ "amount = ?, price = ?, categoryId = ?, imageURL = ? where productId = ?";
 		
 		try {	
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, product.getProductName());
 			ps.setString(2, product.getDescription());
@@ -356,7 +352,7 @@ public class ProductDAOImp implements IProductDAO {
 		
 		try {
 			
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, product.getProductId());
 			ps.executeUpdate();
@@ -372,8 +368,7 @@ public class ProductDAOImp implements IProductDAO {
 	public int countReview(int productId) {
 		String query = "select count(*) from RATING where productId = ?";
 		try {
-			
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, productId);
 			rs = ps.executeQuery();
@@ -392,8 +387,7 @@ public class ProductDAOImp implements IProductDAO {
 	public float getRatingScore(int productId) {
 		String query = "select AVG(rating) from RATING where productId = ?";
 		try {
-			
-			conn = DBConnection.getConnection();conn = DBConnection.getConnection();
+			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, productId);
 			rs = ps.executeQuery();
