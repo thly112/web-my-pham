@@ -30,30 +30,43 @@ public class UserCartController extends HttpServlet {
 	ICategoryService categoryService = new CategoryServiceImp();
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		String url = req.getRequestURI().toString();
-		int flag = 1;
-		HttpSession session = req.getSession();
-		session.setAttribute("flag", flag);
-		if (url.contains("user/findCartByCartID")) {
-			listCartItemByPage(req, resp);
-		} else if (url.contains("user/deleteCartItem")) {
-			deleteCartItemByPage(req, resp);
-		} else if (url.contains("user/updateCartItem")) {
-			updateCartItem(req, resp);
-		} else if (url.contains("user/mypurchase")) {
-			getMyPurchase(req, resp);
+		try {
+			String url = req.getRequestURI().toString();
+			int flag = 1;
+			HttpSession session = req.getSession();
+			session.setAttribute("flag", flag);
+			if (url.contains("user/findCartByCartID")) {
+				listCartItemByPage(req, resp);
+			} else if (url.contains("user/deleteCartItem")) {
+				deleteCartItemByPage(req, resp);
+			} else if (url.contains("user/updateCartItem")) {
+				updateCartItem(req, resp);
+			} else if (url.contains("user/mypurchase")) {
+				getMyPurchase(req, resp);
+			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
 
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String url = req.getRequestURI().toString();
-		if (url.contains("insertCartItem")) {
-			insertCartItem(req, resp);
-		} else if (url.contains("/user/insertorder")) {
-			insertOrder(req, resp);
-			deleteAllCartItem(req, resp);
+		try {
+			String url = req.getRequestURI().toString();
+			if (url.contains("insertCartItem")) {
+				insertCartItem(req, resp);
+			} else if (url.contains("/user/insertorder")) {
+				insertOrder(req, resp);
+				deleteAllCartItem(req, resp);
+			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
 	}
 
@@ -171,7 +184,7 @@ public class UserCartController extends HttpServlet {
 
 		cartItemService.deleteCartItem(cartId, productId);
 
-		req.setAttribute("message", "Đã xóa thành công");
+		req.setAttribute("message", "Ä�Ã£ xÃ³a thÃ nh cÃ´ng");
 
 		resp.sendRedirect(req.getContextPath() + "/user/findCartByCartID");
 	}
@@ -207,9 +220,9 @@ public class UserCartController extends HttpServlet {
 			CustomerModels cus = customerSerivce.findCustomerByAccountID(user.getAccountID());
 			List<OrdersModels> listOrder = orderService.findAllOrderByUser(cus.getCustomerId());
 			List<OrdersModels> listOrdered = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Save");
-			List<OrdersModels> listOrderDelivering = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Đã giao cho shipper");
-			List<OrdersModels> listOrderComplete = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Đã giao khách hàng");
-			List<OrdersModels> listordersave = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Chưa giao cho shipper");
+			List<OrdersModels> listOrderDelivering = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Ä�Ã£ giao cho shipper");
+			List<OrdersModels> listOrderComplete = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "Ä�Ã£ giao khÃ¡ch hÃ ng");
+			List<OrdersModels> listordersave = orderService.findAllOrderByUserAndOrderStatus(cus.getCustomerId(), "ChÆ°a giao cho shipper");
 			req.setAttribute("listorder", listOrder);
 			req.setAttribute("listordered", listOrdered);
 			req.setAttribute("listdelivering", listOrderDelivering);
