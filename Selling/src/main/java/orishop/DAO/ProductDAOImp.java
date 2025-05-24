@@ -109,6 +109,10 @@ public class ProductDAOImp implements IProductDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
 		}
 
 		return listProduct;
@@ -140,6 +144,10 @@ public class ProductDAOImp implements IProductDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
 		}
 
 		return listProduct;
@@ -172,7 +180,11 @@ public class ProductDAOImp implements IProductDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
+		}
 		return listProduct;
 	}
 
@@ -201,6 +213,10 @@ public class ProductDAOImp implements IProductDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
 		}
 
 		return listProduct;
@@ -232,7 +248,11 @@ public class ProductDAOImp implements IProductDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
+		}
 		return listProduct;
 	}
 	
@@ -379,6 +399,10 @@ public class ProductDAOImp implements IProductDAO {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {}
+		    try { if (ps != null) ps.close(); } catch (Exception e) {}
+		    try { if (conn != null) conn.close(); } catch (Exception e) {}
 		}
 		return 0;
 	}

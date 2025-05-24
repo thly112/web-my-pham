@@ -74,7 +74,7 @@ public class UserProductController extends HttpServlet {
 		catch (Exception ex) {
 			ex.printStackTrace();
 			req.setAttribute("error", "Không tìm thấy sản phẩm.");
-			req.getRequestDispatcher("/viewss/error.jsp").forward(req, resp);
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
 		
 	}

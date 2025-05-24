@@ -3,17 +3,6 @@
 
 <%@ include file="/common/taglist.jsp"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<!-- <!-- Site meta -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Footer</title>
-</head>
-
-<body>
 	<nav class="navbar bg-body-tertiary">
 		<div class="container mt-5 justify-content-center">
 			<div class="row">
@@ -51,5 +40,3 @@
 			</div>
 		</div>
 	</nav>
-</body>
-</html>

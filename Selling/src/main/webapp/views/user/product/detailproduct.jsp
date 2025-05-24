@@ -5,6 +5,7 @@
 
 <head>
 <title>Trang chi tiết sản phẩm</title>
+
 <!-- Bootstrap CSS -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -255,7 +256,7 @@
 			<form action="review" method="post">
 				<div class="user-info">
 					<img
-						src="https://catscanman.net/wp-content/uploads/2021/09/anh-meo-cute-de-thuong-34.jpg"
+						src=""
 						alt="Profile" class="rounded-circle" style="width: 30px;">
 					<div class="name_star">
 						<h5 class="user-name">${customer.customerName }</h5>
@@ -300,7 +301,7 @@
 				<div class="user-comment"">
 					<div class="user-info">
 						<img
-							src="https://catscanman.net/wp-content/uploads/2021/09/anh-meo-cute-de-thuong-34.jpg"
+							src=" 	"
 							alt="Profile" class="rounded-circle" style="width: 30px;">
 						<div class="name_star">
 							<h5 class="user-name">${i.customer.customerName }</h5>

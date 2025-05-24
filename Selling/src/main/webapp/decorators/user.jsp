@@ -3,9 +3,8 @@
 <%@ include file="/common/taglist.jsp"%>
 <!DOCTYPE html>
 <html lang="fr">
-
+<%@ include file="/common/user/header.jsp"%>
 <body>
-	<%@ include file="/common/user/header.jsp"%>
 
 	<div class="fluid-container">
 		<decorator:head></decorator:head>
