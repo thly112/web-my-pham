@@ -248,57 +248,69 @@ public class WebHomeControllers extends HttpServlet {
 	}
 
 	private void postRegister(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html");
-		resp.setCharacterEncoding("UTF-8");
-		req.setCharacterEncoding("UTF-8");
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		String passwordConfirm = req.getParameter("passwordConfirm");
-		String email = req.getParameter("email");
+	    resp.setContentType("text/html; charset=UTF-8");
+	    req.setCharacterEncoding("UTF-8");
 
-		if (password.equals(passwordConfirm)) {
-			String alertMsg = "";
-			if (accountService.checkExistEmail(email)) {
-				alertMsg = "Email đã tồn tại";
-				req.setAttribute("error", alertMsg);
-				req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
-			} else if (accountService.checkExistUsername(username)) {
-				alertMsg = "Tài khoản đã tồn tại";
-				req.setAttribute("error", alertMsg);
-				req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
-			} else {
-				Email sm = new Email();
-				// get the 6-digit code
-				String code = sm.getRandom();
-				AccountModels user = new AccountModels(username, email, code);
-				boolean test = sm.sendEmail(user);
+	    try {
+	        String username = req.getParameter("username");
+	        String password = req.getParameter("password");
+	        String passwordConfirm = req.getParameter("passwordConfirm");
+	        String email = req.getParameter("email");
 
-				if (test) {
-					HttpSession session = req.getSession();
-					session.setAttribute("account", user);
+	        // Kiểm tra dữ liệu nhập vào
+	        if (username == null || password == null || passwordConfirm == null || email == null ||
+	            username.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() || email.isEmpty()) {
+	            req.setAttribute("error", "Vui lòng điền đầy đủ thông tin.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	            return;
+	        }
 
-					boolean isSuccess = accountService.register(username, password, email, code);
+	        if (!password.equals(passwordConfirm)) {
+	            req.setAttribute("error", "Mật khẩu xác nhận không khớp.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	            return;
+	        }
 
-					if (isSuccess) {
-						resp.sendRedirect(req.getContextPath() + "/web/VerifyCode");
+	        if (accountService.checkExistEmail(email)) {
+	            req.setAttribute("error", "Email đã được sử dụng.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	            return;
+	        }
 
-					} else {
-						alertMsg = "Lỗi hệ thống!";
-						req.setAttribute("error", alertMsg);
-						req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
-					}
-				} else {
-					alertMsg = "Lỗi khi gửi mail!!!!!!!!!!!!!!";
-					req.setAttribute("error", alertMsg);
-					req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	        if (accountService.checkExistUsername(username)) {
+	            req.setAttribute("error", "Tên đăng nhập đã tồn tại.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	            return;
+	        }
 
-				}
-			}
-		} else {
-			String alertMsg = "PasswordConfirm khác password";
-			req.setAttribute("error", alertMsg);
-			req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
-		}
+	        // Gửi email xác minh
+	        Email sm = new Email();
+	        String code = sm.getRandom();
+	        AccountModels user = new AccountModels(username, email, code);
+
+	        boolean emailSent = sm.sendEmail(user);
+	        if (!emailSent) {
+	            req.setAttribute("error", "Không thể gửi email xác minh. Vui lòng thử lại.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	            return;
+	        }
+
+	        HttpSession session = req.getSession();
+	        session.setAttribute("account", user);
+
+	        boolean isSuccess = accountService.register(username, password, email, code);
+	        if (isSuccess) {
+	            resp.sendRedirect(req.getContextPath() + "/web/VerifyCode");
+	        } else {
+	            req.setAttribute("error", "Đăng ký thất bại. Vui lòng thử lại sau.");
+	            req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace(); // Có thể thay bằng logger.error("Lỗi đăng ký", e);
+	        req.setAttribute("error", "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+	        req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+	    }
 	}
 
 }

@@ -281,7 +281,7 @@ public class UserProductController extends HttpServlet {
 		int id = Integer.parseInt(req.getParameter("pid"));
 		ProductModels product = productService.findOne(id);
 		productService.deleteProduct(product);
-		resp.sendRedirect(req.getContextPath() + "/product/listproduct");
+		resp.sendRedirect(req.getContextPath() + "/user/product/listProduct");
 
 	}
 
@@ -300,7 +300,7 @@ public class UserProductController extends HttpServlet {
 			// TODO: handle exception
 		}
 
-		resp.sendRedirect(req.getContextPath() + "/product/manager");
+		resp.sendRedirect(req.getContextPath() + "/user/product/manager");
 	}
 
 	private void doPost_Update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -318,7 +318,7 @@ public class UserProductController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		resp.sendRedirect(req.getContextPath() + "/product/manager");
+		resp.sendRedirect(req.getContextPath() + "/user/product/manager");
 
 	}
 
