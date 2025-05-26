@@ -231,6 +231,7 @@ public class ProductDAOImp implements IProductDAO {
 		try {
 
 			String query = "SELECT * FROM PRODUCT ORDER BY price LIMIT " + amount;
+      
 			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
