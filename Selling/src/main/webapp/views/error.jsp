@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");%>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

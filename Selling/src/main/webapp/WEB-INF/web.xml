@@ -21,7 +21,7 @@
 
 	<filter>
 	    <filter-name>HSTSFilter</filter-name>
-	    <filter-class>Filter.HSTSFilter</filter-class>
+	    <filter-class>orishop.fitler.HSTSFilter</filter-class>
 	</filter>
 	
 	<filter-mapping>
@@ -43,5 +43,15 @@
 	<session-config>
 		<tracking-mode>COOKIE</tracking-mode>
 	</session-config>
+	
+	<security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secure Area</web-resource-name>
+            <url-pattern>/*</url-pattern>         
+		</web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint> 
 
 </web-app>
