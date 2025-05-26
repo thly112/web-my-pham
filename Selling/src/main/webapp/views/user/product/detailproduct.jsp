@@ -278,7 +278,7 @@
 							</c:if>
 						</div>
 					</div>
-					<p class="comment-time">${ratingService.findOne(customer.customerId, p.productId).reviewDate }</p>
+					<p class="comment-time"><fmt:formatDate value="${ratingService.findOne(customer.customerId, p.productId).reviewDate }" pattern="dd-MM-yyyy" /></p>
 				</div>
 				<label for="comment"></label> <input class="comment" rows="10"
 					style="height: 100px; width: 400px"
@@ -313,7 +313,7 @@
 								</c:forEach>
 							</div>
 						</div>
-						<p class="comment-time">${i.reviewDate }</p>
+						<p class="comment-time"><fmt:formatDate value="${i.reviewDate}" pattern="dd-MM-yyyy" /></p>
 					</div>
 					<div class="comment-content">
 						<p class="comment">${i.review }</p>
