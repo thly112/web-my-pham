@@ -2,8 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/common/taglist.jsp"%>
 
-<!DOCTYPE html>
-<html>
 <head>
 <link
 	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
@@ -34,14 +32,10 @@
 			</div>
 			<div class="carousel-item">
 				<img
-					src="https://media-cdn.oriflame.com/digitalPromotionsMedia/images/banner-media/VX/20311191/20323475.jpg?version=1&w=2304&bc=%23f5f5f5&ib=%23f5f5f5&q=90&imageFormat=WebP"
+					src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=5d8c283c-25de-4af9-b955-bc96751edb76&w=1366&q=95"
 					class="d-block w-100" alt="...">
-			</div>
-			<!-- <div class="carousel-item">
-        <img
-          src="https://media-asia.oriflame.com/contentImage?externalMediaId=7fa4057e-42b1-4a7e-a4cf-b7c31b4df695&name=18547183_3&inputFormat=jpg/"
-          class="d-block w-100" alt="...">
-      </div> -->
+			</div> 	
+			
 		</div>
 		<button class="carousel-control-prev" type="button"
 			data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -73,7 +67,7 @@
 			<header class="session_header">MỚI RA MẮT</header>
 			<div class="container-fluid">
 				<img class="img-fluid"
-					src="https://media-asia.oriflame.com/contentImage?externalMediaId=3f1fabc6-7a5b-42d4-9061-ce342cdaaaa5&name=18547188_2&inputFormat=jpg"
+					src=""
 					alt="">
 			</div>
 			<div class="container-fluid">
@@ -89,18 +83,20 @@
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="ratings">
-										<c:forEach begin="1"
-											end="${ratingService.averageRating(i.productId) }">
-											<i class="fa fa-star rating-color"></i>
-										</c:forEach>
-										<c:forEach begin="1"
-											end="${5-ratingService.averageRating(i.productId) }">
-											<i class="fa fa-star"></i>
-										</c:forEach>
-									</div>
-									<h5 class="review-count">${ratingService.findByProduct(i.productId).size()}
-										Reviews</h5>
-								</div>
+						                <c:set var="avgRating" value="${averageRatings[i.productId]}" />
+						                <c:set var="emptyStars" value="${5 - avgRating}" />
+						                
+						                <c:forEach begin="1" end="${avgRating}">
+						                    <i class="fa fa-star rating-color"></i>
+						                </c:forEach>
+						                <c:forEach begin="1" end="${emptyStars}">
+						                    <i class="fa fa-star"></i>
+						                </c:forEach>
+						            </div>
+						            <h5 class="review-count">
+						                ${reviewCounts[i.productId]} Reviews
+						            </h5>
+						        </div>
 								<h5 class="card-title card__Name">${i.productName}</h5>
 								<p class="card-text card__Text">${i.description}</p>
 								<p class="price card__Price">${i.price}</p>
@@ -159,7 +155,7 @@
 		<div class="container">
 			<div class="row">
 				<img class="col-6" id=" col banner_news"
-					src="https://media-asia.oriflame.com/contentImage?externalMediaId=efae3a8b-502d-485f-ae4c-125558f433e3&name=18345001_3&inputFormat=jpg&w=1242&bc=%23f5f5f5&ib=%23f5f5f5&q=45"
+					src="https://media-cdn.oriflame.vn/productImage?externalMediaId=product-management-media%2FProducts%2F42256%2FVX%2F42256_3.png&id=20034992&version=1&w=1000&bc=%23f5f5f5&ib=%23f5f5f5&q=90&imageFormat=WebP"
 					alt="">
 				<div class="col-6 row_paragraph">
 					<h2>NGHIÊN CỨU BỞI KHOA HỌC TIÊN TIẾN. MANG LẠI HIỆU QUẢ VƯỢT
@@ -226,7 +222,7 @@
 			<div class="row">
 				<div class="card_news" style="width: 30rem;">
 					<img
-						src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=ee546e51-22e8-470e-844c-dc005111c002&name=top-four-ways-to-better-bone-health&inputFormat=jpg"
+						src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=59d67ffc-a9e3-49a4-a872-9430fcd33151&name=3-5_HealthyGutAndImmunity_487x292_X2-2&inputFormat=jpg&w=980&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 						class="card-img-top_news" alt="...">
 					<div class="card-body_news">
 						<p class="card-text_news">NỀN TẢNG KHOA HỌC</p>
@@ -237,7 +233,7 @@
 				</div>
 				<div class="card_news" style="width: 30rem;">
 					<img
-						src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=d65041dd-899d-4bf1-8d36-462352da3025&name=top-hyperpalatable-foods-why-you-cant-stop-eating&inputFormat=jpg"
+						src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=a2238535-134a-4e0a-a7bc-b53a01d8fcbf&name=2_InspiredByNordicDiet_584x350_X2&inputFormat=jpg&w=1170&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 						class="card-img-top_news" alt="...">
 					<div class="card-body_news">
 						<p class="card-text_news">BÍ QUYẾT KHỎE & ĐẸP</p>
@@ -257,7 +253,7 @@
 					<li class="commit_li">
 						<div class="commit_img">
 							<img
-								src="https://media-asia-cdn.oriflame.com/contentMedia/?externalMediaId=92907f87-9ae8-4ee8-bb54-3e2e36462b6b&mimeType=image%2Fsvg%2Bxml&w=108&bc=%23f5f5f5&ib=%23f5f5f5&q=80"
+								src="https://media-cdn.oriflame.vn/static-media-web/2c74bf39-9aca-4555-a631-b11528df390f?mimeType=image%2Fsvg%2Bxml&w=50&bc=%23f5f5f5&ib=%23f5f5f5&h=50&q=90"
 								alt="">
 						</div>
 						<div class="commit_content">
@@ -268,7 +264,7 @@
 					<li class="commit_li">
 						<div class="commit_img">
 							<img
-								src="https://media-asia-cdn.oriflame.com/contentMedia/?externalMediaId=2fbb76b2-8370-46e8-80b7-04bd2d011984&mimeType=image%2Fsvg%2Bxml&w=108&bc=%23f5f5f5&ib=%23f5f5f5&q=80"
+								src="https://media-cdn.oriflame.vn/static-media-web/8dd264fb-1573-4219-88c2-ca8862160e89?mimeType=image%2Fsvg%2Bxml&w=50&bc=%23f5f5f5&ib=%23f5f5f5&h=50&q=90"
 								alt="">
 						</div>
 						<div class="commit_content">
@@ -280,7 +276,7 @@
 					<li class="commit_li">
 						<div class="commit_img">
 							<img
-								src="https://media-asia-cdn.oriflame.com/contentMedia/?externalMediaId=fb5d6322-ab37-432c-9f66-af3fac1f3d74&mimeType=image%2Fsvg%2Bxml&w=108&bc=%23f5f5f5&ib=%23f5f5f5&q=80"
+								src="https://media-cdn.oriflame.vn/static-media-web/cbf78ac9-e224-4856-9350-b3c5d4a784d2?mimeType=image%2Fsvg%2Bxml&w=50&bc=%23f5f5f5&ib=%23f5f5f5&h=50&q=90"
 								alt="">
 						</div>
 						<div class="commit_content">
@@ -301,15 +297,15 @@
 				danh tiếng Oriflame khi mang đến những sản phẩm an toàn, đáng tin
 				cậy mà vẫn tôn trọng môi trường sinh thái.</p>
 			<img class="item3"
-				src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=2021eadf-6964-43b0-8ab7-d70c050270ad&name=Chun-o-c-sinh-thi&inputFormat=jpg&w=440&bc=%23f5f5f5&ib=%23f5f5f5&q=40"
+				src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=b43d5fd3-1442-4c97-ba3d-35374160196f&name=5-1_41107_492x650+D&inputFormat=jpg&w=980&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 				alt=""> <img class="item4"
-				src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=7cf538ee-9292-4ac9-b2c3-a5f44e463cc8&name=Chit-xut-t-thin-nhin&inputFormat=jpg&w=440&bc=%23f5f5f5&ib=%23f5f5f5&q=40"
+				src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=47bbf2b8-f02f-483d-9036-964137010722&name=4_GG_ColourParty_2_600x360&inputFormat=jpg&w=1170&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 				alt=""> <img class="item5"
-				src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=3c2de03d-b06b-4b76-a74a-ee5a3ebaded6&name=Ht-lm-sch-t-nhin&inputFormat=jpg&w=440&bc=%23f5f5f5&ib=%23f5f5f5&q=40"
+				src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=2cbfbf5d-20b7-4629-bf90-bc6511fdce92&name=3-2_43245_492x650+D&inputFormat=jpg&w=980&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 				alt=""> <img class="item6"
-				src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=aaa9047b-c79d-4ee1-a6eb-9ea9d14bb70b&name=Chun-chu-u-nghim-ngt&inputFormat=jpg&w=440&bc=%23f5f5f5&ib=%23f5f5f5&q=40"
+				src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=7e84336f-a686-486e-b926-f52e4a1f01a8&name=4-2_42113_487x292+D&inputFormat=jpg&w=980&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 				alt=""> <img class="item7"
-				src="https://media-asia-cdn.oriflame.com/contentImage?externalMediaId=e5fa4627-e409-412a-b49d-454ad490e511&name=Kim-nghim-an-ton-cao&inputFormat=jpg&w=440&bc=%23f5f5f5&ib=%23f5f5f5&q=40"
+				src="https://media-cdn.oriflame.vn/contentImage?externalMediaId=f656a9e5-9bef-437d-ab40-9ad69b0eda1a&name=4-1_42113_355x469+D&inputFormat=jpg&w=720&bc=%23ffffff&ib=%23ffffff&q=90&imageFormat=WebP"
 				alt="">
 		</div>
 		<!-- KẾT NỐI -->
@@ -347,4 +343,3 @@
 			src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
 </body>
 
-</html>

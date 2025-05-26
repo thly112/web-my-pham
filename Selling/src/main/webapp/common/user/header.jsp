@@ -3,11 +3,12 @@
 
 <%@ include file="/common/taglist.jsp"%>
 
-<!DOCTYPE html>
-<html>
 
 <head>
 <title>Trang chủ</title>
+
+
+	
 <link
 	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -16,6 +17,7 @@
 <%-- <link
 	href="${pageContext.request.contextPath}/templates/user/css/product/style.css"
 	rel="stylesheet" type="text/css"> --%>
+	
 </head>
 
 <body>
@@ -120,4 +122,3 @@
 	<!-- HEADER END -->
 </body>
 
-</html>

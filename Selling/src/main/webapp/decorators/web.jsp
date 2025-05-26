@@ -3,15 +3,13 @@
 <%@ include file="/common/taglist.jsp"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
+<%@ include file="/common/web/header.jsp"%>
 <title>Insert title here</title>
-</head>
 <body>
 
 	<table border="1" style="width: 100%">
 		<tr>
-			<td colspan="2"><%@ include file="/common/web/header.jsp"%>
+			<td colspan="2">
 			</td>
 		</tr>
 

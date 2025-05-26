@@ -40,58 +40,64 @@ public class UserProductController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String url = req.getRequestURI().toString();
-
-		if (url.contains("listProduct")) {
-			getListProduct(req, resp);
-			
-		} else if (url.contains("productByCategory")) {
-			getProductByCategory(req, resp);
-			
-		}else if (url.contains("detailProduct")) {
-			getDetailProduct(req, resp);
-			
+		try {
+			String url = req.getRequestURI().toString();
+			if (url.contains("listProduct")) {
+				getListProduct(req, resp);
+				
+			} else if (url.contains("productByCategory")) {
+				getProductByCategory(req, resp);
+				
+			}else if (url.contains("detailProduct")) {
+				getDetailProduct(req, resp);
+				
+			}
+//			else if (url.contains("insert")) {
+//				doGet_Insert(req, resp);
+//			}
+			else if (url.contains("update")) {
+				getUpdate(req, resp);
+			} else if (url.contains("delete")) {
+				getDelete(req, resp);
+			} else if (url.contains("filterDesc")) {
+				getFilterDesc(req, resp);
+			} else if (url.contains("filterAsc")) {
+				getFilterAsc(req, resp);
+			} else if (url.contains("topProduct")) {
+				getTopProduct(req, resp);
+			} else if (url.contains("review")) {
+				
+			} else if (url.contains("product/deleterating")) {
+				getDeleteRating(req, resp);
+			}
 		}
-//		else if (url.contains("insert")) {
-//			doGet_Insert(req, resp);
-//		}
-
-		else if (url.contains("update")) {
-			getUpdate(req, resp);
-		} else if (url.contains("delete")) {
-			getDelete(req, resp);
-		} else if (url.contains("filterDesc")) {
-			getFilterDesc(req, resp);
-
-		} else if (url.contains("filterAsc")) {
-			getFilterAsc(req, resp);
-
-		} else if (url.contains("topProduct")) {
-			getTopProduct(req, resp);
-
-		} else if (url.contains("review")) {
-			
-		} else if (url.contains("product/deleterating")) {
-			getDeleteRating(req, resp);
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
-	}
+}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
-
-		String url = req.getRequestURI().toString();
-
-		if (url.contains("update")) {
-			doPost_Update(req, resp);
-		} else if (url.contains("insert")) {
-			doPost_Insert(req, resp);
-		} else if (url.contains("searchProduct")) {
-			postSearchProduct(req, resp);
-		} else if (url.contains("review")) {
-			postReview(req, resp);
+		try {
+			String url = req.getRequestURI().toString();
+			if (url.contains("update")) {
+				doPost_Update(req, resp);
+			} else if (url.contains("insert")) {
+				doPost_Insert(req, resp);
+			} else if (url.contains("searchProduct")) {
+				postSearchProduct(req, resp);
+			} else if (url.contains("review")) {
+				postReview(req, resp);
+			}
 		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			req.setAttribute("error", "Không tìm thấy sản phẩm.");
+			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
+		}
+
 	}
 
 	// Hàm phụ để kiểm tra và chuyển đổi ID thành số nguyên (dành cho bảo mật)
@@ -342,6 +348,7 @@ public class UserProductController extends HttpServlet {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			
 		}
 
 		resp.sendRedirect(req.getContextPath() + "/product/manager");
@@ -439,7 +446,7 @@ public class UserProductController extends HttpServlet {
 				ratingService.insert(rating);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 
 		req.setAttribute("p", product);

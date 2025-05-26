@@ -1,6 +1,8 @@
 c<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/common/taglist.jsp"%>
+<%@ page import="java.lang.Math" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -71,10 +73,7 @@ c<%@ page language="java" contentType="text/html; charset=UTF-8"
 										end="${ratingService.averageRating(i.productId) }">
 										<i class="fa fa-star rating-color"></i>
 									</c:forEach>
-									<c:forEach begin="1"
-										end="${5-ratingService.averageRating(i.productId) }">
-										<i class="fa fa-star"></i>
-									</c:forEach>
+									
 								</div>
 								<h5 class="review-count">${ratingService.findByProduct(i.productId).size()}
 									Reviews</h5>

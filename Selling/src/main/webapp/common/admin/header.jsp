@@ -3,8 +3,17 @@ pageEncoding="UTF-8"%> <%@ include file="/common/taglist.jsp"%>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+
+<meta charset="UTF-8">
+
+<title>header</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!--FONTAWESOME-->
+<link
+	href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css"
+	rel="stylesheet" type="text/css" /
 
     <title>header</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
