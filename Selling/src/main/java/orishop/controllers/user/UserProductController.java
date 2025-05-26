@@ -2,6 +2,7 @@ package orishop.controllers.user;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import orishop.models.AccountModels;
-import orishop.models.CartModels;
 import orishop.models.CategoryModels;
 import orishop.models.CustomerModels;
 import orishop.models.ProductModels;
@@ -42,6 +41,11 @@ public class UserProductController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI().toString();
 
+        // Tạo token CSRF và lưu vào session cho các trang GET
+        HttpSession session = req.getSession();
+        String csrfToken = UUID.randomUUID().toString(); // Tạo token duy nhất
+        session.setAttribute("csrfToken", csrfToken);
+
         if (url.contains("listProduct")) {
             getListProduct(req, resp);
         } else if (url.contains("productByCategory")) {
@@ -67,6 +71,16 @@ public class UserProductController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
+
+        HttpSession session = req.getSession();
+        String csrfToken = (String) session.getAttribute("csrfToken");
+        String requestToken = req.getParameter("csrfToken");
+
+        // Kiểm tra token CSRF
+        if (csrfToken == null || !csrfToken.equals(requestToken)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "CSRF token validation failed");
+            return;
+        }
 
         String url = req.getRequestURI().toString();
 
