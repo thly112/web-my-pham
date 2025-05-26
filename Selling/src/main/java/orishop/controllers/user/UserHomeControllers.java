@@ -1,7 +1,9 @@
 package orishop.controllers.user;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -83,10 +85,24 @@ public class UserHomeControllers extends HttpServlet {
 		List<ProductModels> listProduct = productService.findTopProduct(9);
 		List<ProductModels> listProductSale = productService.findTopSaleProduct(3);
 		List<CategoryModels> listCate = categoryService.findAllCategory();
+		//fix rating
+		Map<Integer, Integer> averageRatings = new HashMap<>();
+		Map<Integer, Integer> reviewCounts = new HashMap<>();
+
+		for (ProductModels product : listProduct) {
+		    int avgRating = ratingService.averageRating(product.getProductId());
+		    avgRating = Math.max(0, Math.min(5, avgRating)); // đảm bảo từ 0 đến 5
+
+		    averageRatings.put(product.getProductId(), avgRating);
+		    reviewCounts.put(product.getProductId(), ratingService.findByProduct(product.getProductId()).size());
+		}
 		
 		req.setAttribute("list", listProduct);
 		req.setAttribute("listS", listProductSale);
 		req.setAttribute("listC", listCate);
+		//fix rating
+		req.setAttribute("averageRatings", averageRatings);
+		req.setAttribute("reviewCounts", reviewCounts);
 
 		req.getRequestDispatcher("/views/user/product/home.jsp").forward(req, resp);
 

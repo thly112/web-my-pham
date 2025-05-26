@@ -75,15 +75,16 @@
          Either JSSE or OpenSSL style configuration may be used regardless of
          the SSLImplementation selected. JSSE style configuration is used below.
     -->
-    <!--
     <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
                maxThreads="150" SSLEnabled="true">
         <SSLHostConfig>
-            <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+            <Certificate certificateKeystoreFile="${user.home}/SSL/local-ssl.p12"
+            			 certificateKeystorePassword="123456"
+            			 certificateKeystoreType="PKCS12" 
                          type="RSA" />
         </SSLHostConfig>
     </Connector>
-    -->
+
     <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
          This connector uses the APR/native implementation which always uses
          OpenSSL for TLS.
@@ -154,10 +155,5 @@
 
       <Context docBase="Selling" path="/Selling" reloadable="true" source="org.eclipse.jst.jee.server:Selling"/></Host>
     </Engine>
-    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
-           maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
-           keystoreFile="C:/Users/trant/keystore.jks" keystorePass="123456"
-           clientAuth="false" sslProtocol="TLS" />
-    
   </Service>
 </Server>
