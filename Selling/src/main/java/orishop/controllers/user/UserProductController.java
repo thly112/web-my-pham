@@ -108,20 +108,17 @@ public class UserProductController extends HttpServlet {
 		return id;
 	}
 	private String sanitizeInput(String input) {
-		if (input == null) {
-			return null;
-		}
-		String sanitized = input.replaceAll("[<>&'\"]", "");
-		if (sanitized.length() > 10 || !sanitized.matches("\\d+")) {
-			return null; // Loại bỏ nếu không hợp lệ
-		}
-		return sanitized;
+	    if (input == null) return "1"; 
+	    String sanitized = input.replaceAll("[<>&'\\\"]", "");
+	    if (sanitized.length() > 10 || !sanitized.matches("\\d+")) {
+	        return "1"; 
+	    }
+	    return sanitized;
 	}
 	// Hàm phụ để kiểm tra và chuyển đổi số trang
 	private int validateAndParsePage(String pageParam, int maxPage, HttpServletResponse resp) throws IOException {
-	    if (pageParam == null) {
-	        return 1;
-	    }
+	    if (maxPage == 0) return 1;
+	    if (pageParam == null) return 1;
 	    try {
 	        int page = Integer.parseInt(pageParam);
 	        if (page <= 0 || page > maxPage) {
@@ -134,6 +131,7 @@ public class UserProductController extends HttpServlet {
 	        return -1;
 	    }
 	}
+
 	
 	private void postSearchProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String proName = req.getParameter("searchProduct");
