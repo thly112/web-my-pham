@@ -3,15 +3,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href='<c:url value="/stylecss/base/basecss.css" />' rel="stylesheet" type="text/css">
-    <link href='<c:url value="/css/bootstrap.css" />' rel="stylesheet" type="text/css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Google fonts-->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+	rel="stylesheet" type="text/css" />
+<link
+	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
+	rel="stylesheet" type="text/css" />
+<link
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/static/css/all.min.css"
+	rel="stylesheet">
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href='<c:url value="/stylecss/base/basecss.css" />'
+	rel="stylesheet" type="text/css">
+<link href='<c:url value="/css/bootstrap.css" />' rel="stylesheet"
+	type="text/css">
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -19,9 +28,13 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/templates/web/css/main.css">
+<link
+	href="${pageContext.request.contextPath}/static/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="fonts/material-icon/css/material-design-iconic-font.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/templates/web/css/main.css">
 </head>
 <body>
     <div class="bg__img">
