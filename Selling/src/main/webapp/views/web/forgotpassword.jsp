@@ -43,58 +43,37 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
       rel="stylesheet"
       href="${pageContext.request.contextPath}/templates/web/css/main.css"
     />
-  </head>
-  <body>
+</head>
+<body>
     <div class="bg__img">
-      <div
-        class="container d-flex justify-content-center w-200 min-vh-100"
-        style="padding-top: 200px"
-      >
-        <form action="forgotpass" method="post">
-          <div
-            class="row border rounded-5 p-3 bg-white shadow edit"
-            style="width: 500px; height: fit-content"
-          >
-            <p style="font-weight: 700">
-              Vui lòng điền Username và Email để hệ thống gửi lại mật khẩu
-            </p>
-            <c:if test="${not empty message}">
-              <div class="alert alert-success">${message}</div>
-            </c:if>
-            <c:if test="${not empty error}">
-              <div class="alert alert-danger">${error}</div>
-            </c:if>
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="username-addon">
-                <i class="fa-solid fa-user"></i>
-                <!-- Thay đổi bi bi-person thành icon bạn muốn sử dụng -->
-              </span>
-              <input
-                type="text"
-                class="form-control form-control-lg bg-light fs-6"
-                placeholder="Username"
-                name="username"
-                aria-describedby="username-addon"
-              />
-            </div>
-            <div class="input-group mb-4">
-              <span class="input-group-text" id="username-addon">
-                <i class="fa-solid fa-envelope"></i>
-                <!-- Thay đổi bi bi-person thành icon bạn muốn sử dụng -->
-              </span>
-              <input
-                type="text"
-                class="form-control form-control-lg bg-light fs-6"
-                placeholder="Nhập Email"
-                name="email"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary w-50 mx-auto">
-              Gửi mật khẩu
-            </button>
-          </div>
-        </form>
-      </div>
+        <div class="container d-flex justify-content-center w-200 min-vh-100" style="padding-top: 200px;">
+            <form action="forgotpass" method="post">
+                <div class="row border rounded-5 p-3 bg-white shadow edit" style="width: 500px; height: fit-content;">
+                    <p style="font-weight: 700;">Vui lòng điền Username và Email để hệ thống gửi lại mật khẩu</p>
+                    <c:if test="${not empty message}">
+                        <div class="alert alert-success">${message}</div>
+                    </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger">${error}</div>
+                    </c:if>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="username-addon">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-lg bg-light fs-6" placeholder="Username" name="username" aria-describedby="username-addon">
+                    </div>
+                    <div class="input-group mb-4">
+                        <span class="input-group-text" id="username-addon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-lg bg-light fs-6" placeholder="Nhập Email" name="email">
+                    </div>
+                    <!-- Thêm token CSRF -->
+                    <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                    <button type="submit" class="btn btn-primary w-50 mx-auto">Gửi mật khẩu</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </body>
+</body>
 </html>

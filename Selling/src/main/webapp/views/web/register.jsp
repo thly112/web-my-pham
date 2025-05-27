@@ -74,119 +74,62 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
       href="${pageContext.request.contextPath}/templates/web/css/main.css"
     />
   </head>
-  <body>
+<body>
     <div class="bg__img">
-      <div
-        class="container d-flex justify-content-center w-200 min-vh-100"
-        style="padding-top: 100px"
-      >
-        <!-- login -->
-        <div
-          class="row border rounded-5 p-3 bg-white"
-          style="width: 900px; height: fit-content"
-        >
-          <!-- 		left box -->
-          <div
-            class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
-            style="background: #fff"
-          >
-            <div class="row align-items-center">
-              <div class="header-text mb-4 text-center">
-                <h1 style="font-size: 2rem">SIGN-UP</h1>
-              </div>
-              <c:if test="${not empty message}">
-                <div class="alert alert-success">${message}</div>
-              </c:if>
-
-              <c:if test="${not empty error}">
-                <div class="alert alert-danger">${error}</div>
-              </c:if>
-
-              <form action="register" method="post">
-                <div class="input-group mb-4">
-                  <input
-                    type="text"
-                    class="form-control form-control-lg bg-light fs-6"
-                    placeholder="Username"
-                    name="username"
-                  />
+        <div class="container d-flex justify-content-center w-200 min-vh-100" style="padding-top: 100px;">
+            <!-- login -->
+            <div class="row border rounded-5 p-3 bg-white" style="width: 900px; height: fit-content;">
+                <!-- left box -->
+                <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #fff;">
+                    <div class="row align-items-center">
+                        <div class="header-text mb-4 text-center">
+                            <h1 style="font-size: 2rem;">SIGN-UP</h1>
+                        </div>
+                        <c:if test="${not empty message}">
+                            <div class="alert alert-success">${message}</div>
+                        </c:if>
+                        <c:if test="${not empty error}">
+                            <div class="alert alert-danger">${error}</div>
+                        </c:if>
+                        <form action="register" method="post">
+                            <div class="input-group mb-4">
+                                <input type="text" class="form-control form-control-lg bg-light fs-6" placeholder="Username" name="username">
+                            </div>
+                            <div class="input-group mb-4">
+                                <input type="text" class="form-control form-control-lg bg-light fs-6" placeholder="Email Address" name="email">
+                            </div>
+                            <div class="input-group mb-4">
+                                <input type="password" class="form-control form-control-lg bg-light fs-6" placeholder="Enter Password" name="password">
+                            </div>
+                            <div class="input-group mb-4">
+                                <input type="password" class="form-control form-control-lg bg-light fs-6" placeholder="Re-Enter Your Password" name="passwordConfirm">
+                            </div>
+                            <div class="form-check" style="margin-left: 12px; margin-bottom: 20px;">
+                                <input type="checkbox" class="form-check-input" id="formCheck">
+                                <label for="formCheck" class="form-check-label text-secondary">
+                                    <small>I agree all statements in <a href="#" class="term-service">Terms of service</a></small>
+                                </label>
+                            </div>
+                            <!-- Thêm token CSRF -->
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                            <div class="input-group mb-4">
+                                <button type="submit" class="btn btn-primary w-100 fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="input-group mb-4">
-                  <input
-                    type="text"
-                    class="form-control form-control-lg bg-light fs-6"
-                    placeholder="Email Address"
-                    name="email"
-                  />
+                <!-- right-box -->
+                <div class="col-md-6 right-box d-flex justify-content-center align-items-center flex-column">
+                    <figure>
+                        <img src="${pageContext.request.contextPath}/templates/web/images/signup-image.jpg" alt="sing up image">
+                    </figure>
+                    <a href="login" class="signup-image-link" style="text-decoration: none;">I am already member</a>
                 </div>
-                <div class="input-group mb-4">
-                  <input
-                    type="password"
-                    class="form-control form-control-lg bg-light fs-6"
-                    placeholder="Enter Password"
-                    name="password"
-                  />
-                </div>
-                <div class="input-group mb-4">
-                  <input
-                    type="password"
-                    class="form-control form-control-lg bg-light fs-6"
-                    placeholder="Re-Enter Your Password"
-                    name="passwordConfirm"
-                  />
-                </div>
-                <div
-                  class="form-check"
-                  style="margin-left: 12px; margin-bottom: 20px"
-                >
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="formCheck"
-                  />
-                  <label for="formCheck" class="form-check-label text-secondary"
-                    ><small
-                      >I agree all statements in
-                      <a href="#" class="term-service">Terms of service</a>
-                    </small></label
-                  >
-                </div>
-                <div class="input-group mb-4">
-                  <button
-                    type="submit"
-                    class="btn btn-primary w-100 fs-6"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                  >
-                    Register
-                  </button>
-                </div>
-              </form>
             </div>
-          </div>
-
-          <!-- right-box -->
-          <div
-            class="col-md-6 right-box d-flex justify-content-center align-items-center flex-column"
-          >
-            <figure>
-              <img
-                src="${pageContext.request.contextPath}/templates/web/images/signup-image.jpg"
-                alt="sing up image"
-              />
-            </figure>
-            <a
-              href="login"
-              class="signup-image-link"
-              style="text-decoration: none"
-              >I am already member</a
-            >
-          </div>
         </div>
-      </div>
     </div>
 
     <script src="${pageContext.request.contextPath}/static/js/popper.min.js"></script>
     <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
-  </body>
+</body>
 </html>

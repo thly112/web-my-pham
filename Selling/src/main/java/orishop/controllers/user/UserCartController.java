@@ -1,9 +1,8 @@
 package orishop.controllers.user;
 
 import java.io.IOException;
-
 import java.util.List;
-import javax.servlet.RequestDispatcher;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +15,6 @@ import orishop.services.*;
 
 @WebServlet(urlPatterns = { "/user/product/insertCartItem", "/user/findCartByCartID", "/user/findCartItem",
 		"/user/insertCartItem", "/user/updateCartItem", "/user/deleteCartItem", "/user/countCartItem", "/user/insertorder", "/user/mypurchase"})
-
 public class UserCartController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -25,11 +23,15 @@ public class UserCartController extends HttpServlet {
 	ICustomerService customerSerivce = new CustomerServiceImp();
 	IEmployeeService empService = new EmployeeServiceImp();
 	IOrderService orderService = new OrderServiceImpl();
-
 	IProductService productService = new ProductServiceImp();
 	ICategoryService categoryService = new CategoryServiceImp();
-	
+
+	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Tạo token CSRF và lưu vào session
+		HttpSession session = req.getSession();
+		String csrfToken = UUID.randomUUID().toString();
+		session.setAttribute("csrfToken", csrfToken);
 		try {
 			String url = req.getRequestURI().toString();
 			int flag = 1;
@@ -50,10 +52,20 @@ public class UserCartController extends HttpServlet {
 			req.setAttribute("error", "Không tìm thấy sản phẩm.");
 			req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 		}
-
 	}
-	
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {try {
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Kiểm tra token CSRF
+		HttpSession session = req.getSession();
+		String csrfToken = (String) session.getAttribute("csrfToken");
+		String requestToken = req.getParameter("csrfToken");
+
+		if (csrfToken == null || !csrfToken.equals(requestToken)) {
+			resp.sendError(HttpServletResponse.SC_FORBIDDEN, "CSRF token validation failed");
+			return;
+		}
+  try {
 		String url = req.getRequestURI().toString();
 		if (url.contains("insertCartItem")) {
 			insertCartItem(req, resp);
@@ -67,6 +79,32 @@ public class UserCartController extends HttpServlet {
 		req.getRequestDispatcher("/views/error.jsp").forward(req, resp);
 	}
 }
+
+	private void insertCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+
+		HttpSession session = req.getSession();
+		int cartId = (int) session.getAttribute("cartID");
+		int productId = (int) session.getAttribute("productID");
+		int quantity = Integer.parseInt(req.getParameter("quantity"));
+
+		CartItemModels model = cartItemService.findCartItemByProductID(cartId, productId);
+		if (model.getCartID() != cartId) {
+			CartItemModels cartItem = new CartItemModels();
+			cartItem.setCartID(cartId);
+			cartItem.setProductID(productId);
+			cartItem.setQuantity(quantity);
+			cartItemService.insertCartItem(cartItem);
+		} else {
+			CartItemModels cartItem = new CartItemModels();
+			cartItem.setCartID(cartId);
+			cartItem.setProductID(productId);
+			cartItem.setQuantity(quantity + model.getQuantity());
+			cartItemService.updateCartItem(cartItem);
+		}
+		resp.sendRedirect(req.getContextPath() + "/user/findCartByCartID");
+	}
 
 	private void updateCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
@@ -88,92 +126,60 @@ public class UserCartController extends HttpServlet {
 		resp.sendRedirect(req.getContextPath() + "/user/findCartByCartID");
 	}
 
-	private void insertCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	private void listCartItemByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 
 		HttpSession session = req.getSession();
-		int cartId = ((int) session.getAttribute("cartID"));
-		int productId = ((int) session.getAttribute("productID"));
-		int quantity = Integer.parseInt(req.getParameter("quantity"));
+		AccountModels user = (AccountModels) session.getAttribute("account");
+		if (user != null) {
+			CustomerModels cus = customerSerivce.findCustomerByAccountID(user.getAccountID());
+			CartModels cart1 = cartService.findCartByCustomerID(cus.getCustomerId());
 
-		CartItemModels model = cartItemService.findCartItemByProductID(cartId, productId);
-		if (model.getCartID() != cartId) {
-			CartItemModels cartItem = new CartItemModels();
-			cartItem.setCartID(cartId);
-			cartItem.setProductID(productId);
-			cartItem.setQuantity(quantity);
-			cartItemService.insertCartItem(cartItem);
+			req.setAttribute("username", user.getUsername());
+			req.setAttribute("accountID", user.getAccountID());
+
+			session.setAttribute("cartID", cart1.getCartId());
+			req.setAttribute("cartID", (int) session.getAttribute("cartID"));
+
+			int countCartItem = cartItemService.countCartItem((int) session.getAttribute("cartID"));
+			session.setAttribute("countCartItem", countCartItem);
+			req.setAttribute("countCartItem", (int) session.getAttribute("countCartItem"));
+		}
+
+		CartModels cart = cartService.findCartByCartID((int) session.getAttribute("cartID"));
+		req.setAttribute("cart", cart);
+		List<CartItemModels> listCartItem = cartItemService.findCartItemByCartID(cart.getCartId());
+		session.setAttribute("listCartItem", listCartItem);
+
+		int pagesize = 4;
+		int size = listCartItem.size();
+		int num = (size % pagesize == 0 ? (size / pagesize) : (size / pagesize + 1));
+		int page, numberpage = pagesize;
+		String xpage = req.getParameter("page");
+		if (xpage == null) {
+			page = 1;
 		} else {
-			CartItemModels cartItem = new CartItemModels();
-			cartItem.setCartID(cartId);
-			cartItem.setProductID(productId);
-			cartItem.setQuantity(quantity + model.getQuantity());
-			cartItemService.updateCartItem(cartItem);
+			page = Integer.parseInt(xpage);
 		}
-		resp.sendRedirect(req.getContextPath() + "/user/findCartByCartID");
+		int start, end;
+		start = (page - 1) * numberpage;
+		end = Math.min(page * numberpage, size);
+
+		List<CartItemModels> list = cartItemService.getCartItemByPage(listCartItem, start, end);
+		req.setAttribute("list", list);
+		req.setAttribute("page", page);
+		req.setAttribute("num", num);
+		req.setAttribute("count", listCartItem.size());
+
+		float totalPriceCart = cartService.totalPriceCart((int) session.getAttribute("cartID"));
+		session.setAttribute("totalPriceCart", totalPriceCart);
+		req.setAttribute("totalPriceCart", (float) session.getAttribute("totalPriceCart"));
+
+		req.getRequestDispatcher("/views/user/inforuser_cart/cart.jsp").forward(req, resp);
 	}
 
-	private void listCartItemByPage(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String url = req.getRequestURI().toString();
-
-		if (url.contains("user/findCartByCartID")) {
-			req.setCharacterEncoding("UTF-8");
-			resp.setCharacterEncoding("UTF-8");
-
-			HttpSession session = req.getSession();
-			AccountModels user = (AccountModels) session.getAttribute("account");
-			if (user != null) {
-				CustomerModels cus = customerSerivce.findCustomerByAccountID(user.getAccountID());
-				CartModels cart1 = cartService.findCartByCustomerID(cus.getCustomerId());
-
-				req.setAttribute("username", user.getUsername());
-				req.setAttribute("accountID", user.getAccountID());
-
-				session = req.getSession(true);
-				session.setAttribute("cartID", cart1.getCartId());
-				req.setAttribute("cartID", (int) session.getAttribute("cartID"));
-
-				int countCartItem = cartItemService.countCartItem((int) session.getAttribute("cartID"));
-				session.setAttribute("countCartItem", countCartItem);
-				req.setAttribute("countCartItem", (int) session.getAttribute("countCartItem"));
-			}
-
-			CartModels cart = cartService.findCartByCartID((int) session.getAttribute("cartID"));
-			req.setAttribute("cart", cart);
-			List<CartItemModels> listCartItem = cartItemService.findCartItemByCartID(cart.getCartId());
-			session.setAttribute("listCartItem", listCartItem);
-
-			int pagesize = 4;
-			int size = listCartItem.size();
-			int num = (size % pagesize == 0 ? (size / pagesize) : (size / pagesize + 1));
-			int page, numberpage = pagesize;
-			String xpage = req.getParameter("page");
-			if (xpage == null) {
-				page = 1;
-			} else {
-				page = Integer.parseInt(xpage);
-			}
-			int start, end;
-			start = (page - 1) * numberpage;
-			end = Math.min(page * numberpage, size);
-
-			List<CartItemModels> list = cartItemService.getCartItemByPage(listCartItem, start, end);
-			req.setAttribute("list", list);
-			req.setAttribute("page", page);
-			req.setAttribute("num", num);
-			req.setAttribute("count", listCartItem.size());
-
-			float totalPriceCart = cartService.totalPriceCart((int) session.getAttribute("cartID"));
-			session.setAttribute("totalPriceCart", totalPriceCart);
-			req.setAttribute("totalPriceCart", (float) session.getAttribute("totalPriceCart"));
-
-			req.getRequestDispatcher("/views/user/inforuser_cart/cart.jsp").forward(req, resp);
-		}
-	}
-	private void deleteCartItemByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
-	{
+	private void deleteCartItemByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 
@@ -186,7 +192,7 @@ public class UserCartController extends HttpServlet {
 
 		resp.sendRedirect(req.getContextPath() + "/user/findCartByCartID");
 	}
-	
+
 	private void insertOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
@@ -200,9 +206,8 @@ public class UserCartController extends HttpServlet {
 
 		orderService.createOrder(model, customerId, totalPriceOrder, listCartItem);
 	}
-	
-	private void deleteAllCartItem(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+
+	private void deleteAllCartItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		HttpSession session = req.getSession();
@@ -210,7 +215,7 @@ public class UserCartController extends HttpServlet {
 
 		cartItemService.deleteAllCartItem(cartID);
 	}
-	
+
 	private void getMyPurchase(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		HttpSession session = req.getSession();
 		AccountModels user = (AccountModels) session.getAttribute("account");
@@ -226,7 +231,7 @@ public class UserCartController extends HttpServlet {
 			req.setAttribute("listdelivering", listOrderDelivering);
 			req.setAttribute("listcomplete", listOrderComplete);
 			req.setAttribute("listordersave", listordersave);
-			
+
 			req.getRequestDispatcher("/views/user/inforuser_cart/mypurchase.jsp").forward(req, resp);
 		}
 	}

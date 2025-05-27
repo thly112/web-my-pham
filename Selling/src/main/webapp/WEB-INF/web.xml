@@ -28,6 +28,11 @@
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+        <filter-name>securityHeaderFilter</filter-name>
+        <filter-class>orishop.util.SecurityHeaderFilter</filter-class>
+    </filter>
 
 <filter>
     <filter-name>SecurityHeadersFilter</filter-name>
@@ -37,12 +42,9 @@
     <filter-name>SecurityHeadersFilter</filter-name>
     <url-pattern>/*</url-pattern>
 </filter-mapping>
-
-
 	<session-config>
 		<tracking-mode>COOKIE</tracking-mode>
 	</session-config>
-	
 	<security-constraint>
         <web-resource-collection>
             <web-resource-name>Secure Area</web-resource-name>
@@ -52,5 +54,4 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint> 
-
 </web-app>

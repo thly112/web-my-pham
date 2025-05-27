@@ -2,6 +2,7 @@ package orishop.controllers.user;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import orishop.models.AccountModels;
-import orishop.models.CartModels;
 import orishop.models.CategoryModels;
 import orishop.models.CustomerModels;
 import orishop.models.ProductModels;
@@ -25,12 +24,11 @@ import orishop.services.IRatingService;
 import orishop.services.ProductServiceImp;
 import orishop.services.RatingServiceImpl;
 
-
 @WebServlet(urlPatterns = {"/user/product/listProduct", "/user/product/productByCategory", "/user/product/detailProduct", 
-		"/user/product/manager", "/user/product/insert", "/user/product/update",
-		"/user/product/delete", "/user/product/filterDesc", "/user/product/filterAsc", 
-		"/user/product/topProduct", "/user/product/searchProduct", "/user/product/review",
-		"/user/product/deleterating"})
+        "/user/product/manager", "/user/product/insert", "/user/product/update",
+        "/user/product/delete", "/user/product/filterDesc", "/user/product/filterAsc", 
+        "/user/product/topProduct", "/user/product/searchProduct", "/user/product/review",
+        "/user/product/deleterating"})
 public class UserProductController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -42,6 +40,12 @@ public class UserProductController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			String url = req.getRequestURI().toString();
+      
+        // Tạo token CSRF và lưu vào session cho các trang GET
+        HttpSession session = req.getSession();
+        String csrfToken = UUID.randomUUID().toString(); // Tạo token duy nhất
+        session.setAttribute("csrfToken", csrfToken);
+      
 			if (url.contains("listProduct")) {
 				getListProduct(req, resp);
 				
@@ -81,6 +85,19 @@ public class UserProductController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
+        HttpSession session = req.getSession();
+        String csrfToken = (String) session.getAttribute("csrfToken");
+        String requestToken = req.getParameter("csrfToken");
+
+        // Kiểm tra token CSRF
+        if (csrfToken == null || !csrfToken.equals(requestToken)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "CSRF token validation failed");
+            return;
+        }
+      
 			String url = req.getRequestURI().toString();
 			if (url.contains("update")) {
 				doPost_Update(req, resp);
@@ -156,6 +173,16 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
+    
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
+    
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -184,6 +211,15 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
+    
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -213,6 +249,15 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
+    
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -239,6 +284,13 @@ public class UserProductController extends HttpServlet {
 			if (id == -1) return;
 
 			ProductModels pro = productService.findOne(id);
+      
+      // Loại bỏ timestamp từ URL hình ảnh
+      String imageUrl = pro.getImageURL();
+      if (imageUrl != null && imageUrl.contains("-")) {
+          String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+          pro.setImageURL(cleanUrl);
+      }
 			if (pro == null) {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
 				return;
@@ -274,6 +326,16 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
+    
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
+    
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -309,6 +371,15 @@ public class UserProductController extends HttpServlet {
 		
 		List<CategoryModels> listCate = categoryService.findAllCategory();
 		
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
+    
 		req.setAttribute("list", list);
 		req.setAttribute("listC", listCate);
 
@@ -406,6 +477,16 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
+    
+    // Loại bỏ timestamp từ URL hình ảnh
+    for (ProductModels product : list) {
+        String imageUrl = product.getImageURL();
+        if (imageUrl != null && imageUrl.contains("-")) {
+            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
+            product.setImageURL(cleanUrl);
+        }
+    }
+    
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
