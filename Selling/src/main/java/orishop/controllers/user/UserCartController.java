@@ -35,7 +35,6 @@ public class UserCartController extends HttpServlet {
 		try {
 			String url = req.getRequestURI().toString();
 			int flag = 1;
-			HttpSession session = req.getSession();
 			session.setAttribute("flag", flag);
 			if (url.contains("user/findCartByCartID")) {
 				listCartItemByPage(req, resp);
