@@ -126,6 +126,30 @@ public class WebHomeControllers extends HttpServlet {
             String username = req.getParameter("username");
             String email = req.getParameter("email");
 
+            if (username == null || email == null || username.isEmpty() || email.isEmpty()) {
+                req.setAttribute("error", "Tên đăng nhập hoặc email không được để trống");
+                req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+                return;
+            }
+
+            if (username.length() > 50 || email.length() > 255) {
+                req.setAttribute("error", "Tên đăng nhập hoặc email vượt quá độ dài cho phép");
+                req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!username.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho tên đăng nhập");
+                req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                req.setAttribute("error", "Email không hợp lệ");
+                req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
+                return;
+            }
+
             AccountModels user = accountService.findOne(username);
 
             if (user == null || user.getMail() == null || user.getUsername() == null) {
@@ -152,7 +176,6 @@ public class WebHomeControllers extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             req.setAttribute("error", "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
             req.getRequestDispatcher("/views/web/forgotpassword.jsp").forward(req, resp);
         }
@@ -192,7 +215,25 @@ public class WebHomeControllers extends HttpServlet {
             boolean isRememberMe = "on".equals(remember);
 
             if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-                req.setAttribute("error", "Tài khoản hoặc mật khẩu không đúng");
+                req.setAttribute("error", "Tài khoản hoặc mật khẩu không được để trống");
+                req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+                return;
+            }
+
+            if (username.length() > 50 || password.length() > 50) {
+                req.setAttribute("error", "Tài khoản hoặc mật khẩu vượt quá độ dài cho phép");
+                req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!username.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho tên đăng nhập");
+                req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!password.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho mật khẩu");
                 req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
                 return;
             }
@@ -215,7 +256,6 @@ public class WebHomeControllers extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/web/waiting");
 
         } catch (Exception e) {
-            e.printStackTrace();
             req.setAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
             req.getRequestDispatcher("/views/web/login.jsp").forward(req, resp);
         }
@@ -252,7 +292,37 @@ public class WebHomeControllers extends HttpServlet {
 
             if (username == null || password == null || passwordConfirm == null || email == null ||
                 username.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() || email.isEmpty()) {
-                req.setAttribute("error", "Vui lòng điền đầy đủ thông tin.");
+                req.setAttribute("error", "Thông tin không được để trống");
+                req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+                return;
+            }
+
+            if (username.length() > 50 || password.length() > 50 || passwordConfirm.length() > 50 || email.length() > 255) {
+                req.setAttribute("error", "Thông tin vượt quá độ dài cho phép");
+                req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!username.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho tên đăng nhập");
+                req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!password.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho mật khẩu");
+                req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!passwordConfirm.matches("[a-zA-Z0-9]+")) {
+                req.setAttribute("error", "Không được dùng ký tự đặc biệt cho mật khẩu xác nhận");
+                req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
+                return;
+            }
+
+            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                req.setAttribute("error", "Email không hợp lệ");
                 req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
                 return;
             }
@@ -298,7 +368,6 @@ public class WebHomeControllers extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             req.setAttribute("error", "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
             req.getRequestDispatcher("/views/web/register.jsp").forward(req, resp);
         }
