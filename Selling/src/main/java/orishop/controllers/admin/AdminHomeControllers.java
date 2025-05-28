@@ -11,11 +11,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import orishop.DAO.CustomerDAOImp;
 import orishop.DAO.IEmployeeDAO;
+import orishop.models.AccountModels;
 import orishop.models.CategoryModels;
 import orishop.models.CustomerModels;
 import orishop.models.EmployeeModels;
@@ -39,6 +41,18 @@ public class AdminHomeControllers extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession(false);
+		if (session == null || session.getAttribute("account") == null) {
+	        resp.sendRedirect(req.getContextPath() + "/web/login");
+	        return;
+	    }
+	    AccountModels user = (AccountModels) session.getAttribute("account");
+	    if (user.getRoleID() != 2) { // Chỉ admin (roleID = 2) được truy cập (thay roleID nếu ở những trang khác)
+	        resp.sendRedirect(req.getContextPath() + "/access-denied.jsp");
+	        return;
+	    }
+
+
 		String url = req.getRequestURI();
 		if(url.contains("admin/home")) {
 			//findAllShipper(req, resp);
