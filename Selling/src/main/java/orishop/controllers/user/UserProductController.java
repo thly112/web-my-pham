@@ -70,7 +70,7 @@ public class UserProductController extends HttpServlet {
 			} else if (url.contains("topProduct")) {
 				getTopProduct(req, resp);
 			} else if (url.contains("review")) {
-				
+
 			} else if (url.contains("product/deleterating")) {
 				getDeleteRating(req, resp);
 			}
@@ -174,15 +174,6 @@ public class UserProductController extends HttpServlet {
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
     
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
-    
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -211,15 +202,7 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
-    
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
+
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -250,14 +233,6 @@ public class UserProductController extends HttpServlet {
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
     
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -285,12 +260,6 @@ public class UserProductController extends HttpServlet {
 
 			ProductModels pro = productService.findOne(id);
       
-      // Loại bỏ timestamp từ URL hình ảnh
-      String imageUrl = pro.getImageURL();
-      if (imageUrl != null && imageUrl.contains("-")) {
-          String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-          pro.setImageURL(cleanUrl);
-      }
 			if (pro == null) {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
 				return;
@@ -327,15 +296,6 @@ public class UserProductController extends HttpServlet {
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
     
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
-    
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
 		req.setAttribute("num", num);
@@ -370,16 +330,7 @@ public class UserProductController extends HttpServlet {
 		req.setAttribute("count", listProduct.size());
 		
 		List<CategoryModels> listCate = categoryService.findAllCategory();
-		
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
-    
+
 		req.setAttribute("list", list);
 		req.setAttribute("listC", listCate);
 
@@ -477,15 +428,6 @@ public class UserProductController extends HttpServlet {
 		start = (page - 1) * pagesize;
 		end = Math.min(page*pagesize, size);
 		List<ProductModels> list = productService.getListEmpByPage(listProduct, start, end);
-    
-    // Loại bỏ timestamp từ URL hình ảnh
-    for (ProductModels product : list) {
-        String imageUrl = product.getImageURL();
-        if (imageUrl != null && imageUrl.contains("-")) {
-            String cleanUrl = imageUrl.substring(0, imageUrl.lastIndexOf("-")) + ".jpg";
-            product.setImageURL(cleanUrl);
-        }
-    }
     
 		req.setAttribute("list", list);
 		req.setAttribute("page", page);
