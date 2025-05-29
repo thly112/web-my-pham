@@ -111,7 +111,7 @@ public class AccountDAOImpl implements IAccountDAO {
 			ps.setString(2, model.getUsername());
 			String password = PasswordEncryption.encrypt(model.getPassword(), Constant.SECRETKEY, Constant.SALT);
 			ps.setString(3, password);
-			ps.setInt(4, model.getStatus());
+			ps.setInt(4, 1);
 			ps.setInt(5, model.getRoleID());
 			ps.setString(6, model.getCode());
 
@@ -191,7 +191,7 @@ public class AccountDAOImpl implements IAccountDAO {
 
 	@Override
 	public void updatestatus(AccountModels model) {
-		String sql = "UPDATE [Account] Set status=?, code=? where mail=?";
+		String sql = "UPDATE Account Set status=?, code=? where mail=?";
 		try {
 			conn = DBConnection.getConnection();
 			ps = conn.prepareStatement(sql);
