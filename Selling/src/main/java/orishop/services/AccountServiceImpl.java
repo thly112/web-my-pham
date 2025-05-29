@@ -67,16 +67,47 @@ public class AccountServiceImpl implements IAccountService{
 	}
 
 	@Override
-	public AccountModels login(String username, String password) {
-		AccountModels user = this.findOne(username);
-		String passwordDecryption = PasswordEncryption.decrypt(user.getPassword(), Constant.SECRETKEY, Constant.SALT);
-		if (user!=null && password.equals(user.getPassword())) {
-			return user;
-		} else if (user!=null && (password.equals(passwordDecryption))) {
-			return user;
-		} else
-		return null;
-	}
+    public AccountModels login(String username, String password) {
+        // Log thông tin đầu vào
+        System.out.println("Login attempt - Username: " + username);
+        System.out.println("Input password: " + password);
+
+        AccountModels user = this.findOne(username);
+        if (user == null || user.getPassword() == null) {
+            System.out.println("User not found or password is null for username: " + username);
+            return null;
+        }
+
+        // Log mật khẩu mã hóa từ cơ sở dữ liệu
+        System.out.println("Encrypted password from database: " + user.getPassword());
+
+        try {
+            // Giải mã mật khẩu
+            String passwordDecryption = PasswordEncryption.decrypt(user.getPassword(), Constant.SECRETKEY, Constant.SALT);
+            
+            // Log kết quả giải mã
+            if (passwordDecryption != null) {
+                System.out.println("Decrypted password: " + passwordDecryption);
+            } else {
+                System.out.println("Decryption failed: Decrypted password is null");
+                return null;
+            }
+
+            // So sánh mật khẩu
+            if (password.equals(passwordDecryption)) {
+                System.out.println("Password match: Login successful for username: " + username);
+                return user;
+            } else {
+                System.out.println("Password does not match: Input password does not match decrypted password");
+                return null;
+            }
+        } catch (Exception e) {
+            // Log lỗi chi tiết nếu giải mã thất bại
+            System.err.println("Decryption error for username: " + username);
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	@Override
 	public boolean checkExistUsername(String username) {
