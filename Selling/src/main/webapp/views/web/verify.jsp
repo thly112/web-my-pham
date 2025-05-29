@@ -71,6 +71,8 @@ pageEncoding="UTF-8"%> <%@include file="/common/taglist.jsp"%>
             <c:if test="${not empty error}">
               <div class="alert alert-danger">${error}</div>
             </c:if>
+            <!-- Thêm token CSRF -->
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <button type="submit" class="btn btn-primary w-50 mx-auto">
               Kích hoạt
             </button>
