@@ -160,7 +160,7 @@ public class CustomerDAOImp implements ICustomerDAO{
 	@Override
 	public void editInfor(CustomerModels model) {
 			String sql = "update CUSTOMER set CustomerName = ?, Birthday = ?, Gender = ?, Address = ?, Phone = ?,"
-					+ " Mail = ?, Rank = ?, Reputation = ?, RewardPoints = ?, AccountID = ? where CustomerID = ?";
+					+ " Mail = ?, `Rank` = ?, Reputation = ?, RewardPoints = ?, AccountID = ? where CustomerID = ?";
 			try {
 				new DBConnection();
 				conn = DBConnection.getConnection();

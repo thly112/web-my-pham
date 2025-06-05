@@ -26,12 +26,11 @@ public class SecurityHeadersFilter implements Filter {
         httpResponse.setHeader("Referrer-Policy", "no-referrer");
         
 //        Content Security Policy (CSP) — giới hạn tài nguyên có thể tải
-//        Tùy chỉnh theo nhu cầu nếu bạn dùng CDN, JS, ảnh bên ngoài
-//        httpResponse.setHeader("Content-Security-Policy",
-//        	    "default-src 'self'; " +
-//        	    "script-src 'self'; " +
-//        	    "style-src 'self' 'unsafe-inline'; " + // Cho phép style nội tuyến
-//        	    "img-src * data:;");
+        httpResponse.setHeader("Content-Security-Policy",
+            "default-src 'self'; " +
+            "script-src 'self' https://cdnjs.cloudflare.com; " +
+            "style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; " +
+            "img-src 'self' https: data:;");
 
         chain.doFilter(request, response);
     }

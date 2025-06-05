@@ -144,17 +144,24 @@ public class UserHomeControllers extends HttpServlet {
 
 		HttpSession session = req.getSession();
 		CustomerModels model = (CustomerModels) session.getAttribute("customer");
-		try {
-			// lay du lieu tu jsp bang beanutils
-			BeanUtils.populate(model, req.getParameterMap());
 
-			//model.setCategory(catService.findOne(model.getCategoryID())); 
-			cusService.editInfor(model);
-			//thông báo kết quả
-			session.setAttribute("customer", model);
-		} catch (Exception e) {
-			e.printStackTrace();
+		// Lấy dữ liệu từ request
+		String customerName = req.getParameter("customerName");
+		// ... các trường khác
+
+		// Input validation cho tên
+		if (!customerName.matches("[a-zA-Z0-9\\s]+")) {
+			req.setAttribute("error", "Tên chỉ được chứa chữ cái, số và khoảng trắng.");
+			req.getRequestDispatcher("/views/user/inforuser_cart/inforuser.jsp").forward(req, resp);
+			return;
 		}
+
+		// Tiếp tục xử lý như cũ...
+		model.setCustomerName(customerName);
+		// ... các trường khác
+		cusService.editInfor(model);
+		// ...
+		session.setAttribute("customer", model);
 		req.getRequestDispatcher("/views/user/inforuser_cart/inforuser.jsp").forward(req, resp);
 	}
 }
